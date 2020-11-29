@@ -39,10 +39,15 @@ const setUpConnection = (err, client) => {
     db.once("open", () => console.log("Connected to the database"))
     // checks if connection with the database is successful
     db.on("error", console.error.bind(console, "MongoDB connection error:"))
-    mongoose.connect(mongodbURI, { useUnifiedTopology: true, useNewUrlParser: true })
+    mongoose.connect(mongodbURI, { 
+        useUnifiedTopology: true, 
+        useNewUrlParser: true,
+        connectTimeoutMS: 60000,
+        socketTimeoutMS: 60000
+    })
     mqttClient = mqtt.connect(mqttBroker, 
         {rejectUnauthorized: false}
-        )
+    )
 
     mqttClient.on('connect', function () {
         console.log("ET logger connected to mqtt broker")
@@ -57,7 +62,7 @@ const setUpConnection = (err, client) => {
 }
 
 mongodbClient.connect(mongodbURI,
-    { useNewUrlParser: true, useUnifiedTopology: true },
+    { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 60000, socketTimeoutMS: 60000 },
     setUpConnection)
 
 
@@ -81,7 +86,6 @@ function handleMessages(topic, message) {
                 if (err) { console.log(err) }
             })   
         } else if(ETObject.tag != undefined && testMode){
-            consolmo
             let ETInfo = new ET(ETObject)        
             ETInfo.save((err, q) => {
                 if (err) { console.log(err) }

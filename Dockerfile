@@ -2,10 +2,10 @@ FROM node:latest
 EXPOSE 3001
 
 COPY "etLogger.js" "/etLogger.js"
+COPY "package.json" "/package.json"
+COPY "package-lock.json" "/package-lock.json"
 COPY "config.js" "/config.js"
 
-RUN "mkdir" "/node_modules"
-
-ADD "node_modules" "/node_modules"
+RUN "npm" "install"
 
 CMD ["node", "etLogger.js"]
