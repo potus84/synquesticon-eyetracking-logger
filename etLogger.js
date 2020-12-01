@@ -66,7 +66,13 @@ mongodbClient.connect(mongodbURI,
     setUpConnection)
 
 
-let tag = ""
+var tag = ""
+
+var data = []
+
+var testData = []
+
+const windowSize = config.windowSize
 
 function handleMessages(topic, message) {
     message = JSON.parse(message)
@@ -81,15 +87,25 @@ function handleMessages(topic, message) {
         ETObject = message
         if(ETObject.tag == undefined) { //only save message with undefined tag 
             ETObject.tag = tag
-            let ETInfo = new ET(ETObject)        
-            ETInfo.save((err, q) => {
-                if (err) { console.log(err) }
-            })   
+
+            data.push(ETObject)
+
+            if(data.length == windowSize){
+                ET.insertMany(data)
+                    .catch(error => console.log(error))
+                data = []
+            }
+
+            
         } else if(ETObject.tag != undefined && testMode){
-            let ETInfo = new ET(ETObject)        
-            ETInfo.save((err, q) => {
-                if (err) { console.log(err) }
-            })
+            testData.push(ETObject)
+
+            if(testData.length == windowSize){
+                ET.insertMany(testData)
+                .catch(error => console.log(error))
+
+                testData = []                
+            }
         }
         else if(ETObject.tag.includes('test_streaming')){
             console.log("Test streaming, not logged")
