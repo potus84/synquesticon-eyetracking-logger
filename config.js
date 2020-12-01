@@ -6,7 +6,7 @@ config.eyeTrackingSchema = {
     user: { 
         uid: String 
     },
-    timestamp: {type: Number, unique: true, index: true},
+    timestamp: Number,
     startTime: Number,
     sampleCount: Number,
     recordingCount: Number,

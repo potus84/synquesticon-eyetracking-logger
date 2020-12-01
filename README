@@ -1,7 +1,5 @@
 Codes for logging eye tracker from the mqtt broker. Create a connection_string.js file and replace those information by your own configurations:
 
-const { mqttBroker } = require("./config")
-
 var connection_string = {}
 connection_string.cosmosdbURI = <YOUR_MONGODB_URI>
 
