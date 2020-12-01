@@ -1,70 +1,10 @@
-Codes for logging eye tracker from the mqtt broker. Create a config.js file and replace those information by your own configurations:
+Codes for logging eye tracker from the mqtt broker. Create a connection_string.js file and replace those information by your own configurations:
 
-var config = {};
+const { mqttBroker } = require("./config")
 
-config.eyeTrackingSchema = {  
-    eyeTrackerSerialNumber: String,
-    user: { 
-        uid: String 
-    },
-    timestamp: Number,
-    startTime: Number,
-    sampleCount: Number,
-    recordingCount: Number,
-    data: [
-        {
-            gaze: {
-                x: Number,
-                y: Number
-            },
-            pupilDiameter: {
-                LeftEye: Number,
-                RightEye: Number
-            },
-            GazePoint_PositionOnDisplayArea: {
-                LeftEye: {
-                    x: Number,
-                    y: Number
-                },
-                RightEye: {
-                    x: Number,
-                    y: Number
-                }
-            },
-            GazeOrigin_PositionInUserCoordinates: {
-                LeftEye: {
-                    x: Number,
-                    y: Number,
-                    z: Number
-                },
-                RightEye: {
-                    x: Number,
-                    y: Number,
-                    z: Number
-                }  
-            },
-            _id: {
-                "$oid": String
-            }
-        }
-    ],
-    tag: String
-}
+var connection_string = {}
+connection_string.cosmosdbURI = <YOUR_MONGODB_URI>
 
-config.mongodbURI = #TODO
+connection_string.mqttBroker = <MQTT BROKER>
 
-config.mqttBroker = #TODO 
-
-config.testLocalhost = {
-    mongodbURI: #TODO
-    mqttBroker: #TODO
-}
-
-
-config.topicsToSubscribe = {
-    eyeTracker:     'sensor/gaze/',
-    taskLoaded:     'onTaskLoaded/'
-}
-
-
-module.exports=config;
+module.exports=connection_string

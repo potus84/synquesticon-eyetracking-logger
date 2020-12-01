@@ -7,8 +7,13 @@ const Schema = mongoose.Schema
 
 const ETSchema = new Schema(
     config.eyeTrackingSchema,
-    { collection: 'Eye_Tracking' }
+    { 
+        collection: 'Eye_Tracking',
+        excludeIndexes: true
+    
+    }
 )
+
 
 const args = process.argv.slice(2)
 
@@ -62,7 +67,12 @@ const setUpConnection = (err, client) => {
 }
 
 mongodbClient.connect(mongodbURI,
-    { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 60000, socketTimeoutMS: 60000 },
+    { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        connectTimeoutMS: 360000,
+        socketTimeoutMS: 360000
+    },
     setUpConnection)
 
 
@@ -91,7 +101,8 @@ function handleMessages(topic, message) {
             data.push(ETObject)
 
             if(data.length == windowSize){
-                ET.insertMany(data)
+                ET.collection.insertMany(data)
+                    .then(() => console.log('Insert up to ',ETObject.sampleCount, ' of recording number ', ETObject.recordingCount))
                     .catch(error => console.log(error))
                 data = []
             }
@@ -101,8 +112,9 @@ function handleMessages(topic, message) {
             testData.push(ETObject)
 
             if(testData.length == windowSize){
-                ET.insertMany(testData)
-                .catch(error => console.log(error))
+                ET.collection.insertMany(testData)
+                    .then(() => console.log('Insert up to ',ETObject.sampleCount, ' of recording number ', ETObject.recordingCount))
+                    .catch(error => console.log(error))
 
                 testData = []                
             }
