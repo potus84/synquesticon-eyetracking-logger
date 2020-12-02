@@ -93,7 +93,7 @@ function handleMessages(topic, message) {
         tag = [setTags, taskTags, receivedTimestamp].join('_')
         console.log("Tag: ", tag)
 
-    } else if(topic.startsWith(mqttTopics.eyeTracker)){
+    } else if(topic.startsWith(mqttTopics.eyeTracker && !topic.includes('prediction'))){
         ETObject = message
         if(ETObject.tag == undefined) { //only save message with undefined tag 
             ETObject.tag = tag
